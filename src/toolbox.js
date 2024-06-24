@@ -625,5 +625,5 @@ export const toolbox = {
       categorystyle: 'procedure_category',
       custom: 'PROCEDURE',
     },
-  ],
+  ]
 };
