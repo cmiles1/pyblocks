@@ -6,37 +6,32 @@
 
 import * as Blockly from 'blockly';
 import {blocks} from './blocks/text';
-import {forBlock} from './generators/javascript';
-import {javascriptGenerator} from 'blockly/javascript';
+import {forBlock} from './generators/python';
+import {pythonGenerator} from 'blockly/python';
 import {save, load} from './serialization';
 import {toolbox} from './toolbox';
-import './index.css';
 
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);
-Object.assign(javascriptGenerator.forBlock, forBlock);
+Object.assign(pythonGenerator.forBlock, forBlock);
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode').firstChild;
-const outputDiv = document.getElementById('output');
 const blocklyDiv = document.getElementById('blocklyDiv');
-const ws = Blockly.inject(blocklyDiv, {toolbox});
+const ws = Blockly.inject(blocklyDiv, {
+  toolbox: toolbox, 
+  media: './media',
+});
 
-// This function resets the code and output divs, shows the
-// generated code from the workspace, and evals the code.
-// In a real application, you probably shouldn't use `eval`.
-const runCode = () => {
-  const code = javascriptGenerator.workspaceToCode(ws);
+
+const workspaceToPython = () => {
+  const code = pythonGenerator.workspaceToCode(ws);
   codeDiv.innerText = code;
-
-  outputDiv.innerHTML = '';
-
-  eval(code);
 };
 
 // Load the initial state from storage and run the code.
 load(ws);
-runCode();
+
 
 // Every time the workspace changes state, save the changes to storage.
 ws.addChangeListener((e) => {
@@ -58,5 +53,5 @@ ws.addChangeListener((e) => {
   ) {
     return;
   }
-  runCode();
+  workspaceToPython();
 });
