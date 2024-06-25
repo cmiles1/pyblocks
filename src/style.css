@@ -37,14 +37,13 @@ body {
   border-left: 5px solid #4CAF50;
 }
 
-.output {
+#outputArea {
   background-color: #1e1e1e;
   color: #ffffff;
   padding: 20px;
   flex: 1;
   border-left: 5px solid #FFC107;
-  overflow-y: auto;
-  /* Allow vertical scrolling */
+  overflow-y: auto; 
 }
 
 .footer {
@@ -72,6 +71,45 @@ body {
 
 .button:hover {
   background-color: #45a049;
+}
+
+.input-div {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 5px 5px 5px 0px;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: large;
+  margin: 4px 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.user-input  {
+  border: none;
+  padding: 2px 4px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: medium;
+  margin: 4px 1px 5px 1px;
+  border-radius: 4px;
+  resize: vertical;
+  flex: 2 2 auto;
+}
+.user-input:disabled {
+  background-color: #f1f1f1;
+  color:#1e1e1e;
+  caret-color: transparent;
 }
 
 pre,
@@ -103,10 +141,13 @@ code {
 
 #generatedCode {
   height: 50%;
-  /*dark blue*/
   background-color: #324E7B;
 }
 
 
-
-
+#pythonArea {
+  color: #ffffff;
+  overflow-y: scroll;
+  white-space: pre-wrap;
+  outline: none;
+}

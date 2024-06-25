@@ -34,7 +34,7 @@ const config = {
         { from: 'src/pyscript', to: 'pyscript' },
         { from: 'src/style.css', to: 'style.css' },
         { from: 'src/pyscript.toml', to: 'pyscript.toml' },
-        { from: 'src/worker.js', to: 'worker.js' },
+        { from: 'src/workerHandler.js', to: 'workerHandler.js' },
         { from: 'src/worker.py', to: 'worker.py' },
         { from: 'node_modules/blockly/media', to: 'media'}
       ],

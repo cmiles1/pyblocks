@@ -21,6 +21,7 @@ Object.assign(pythonGenerator.forBlock, forBlock);
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode').firstChild;
+codeDiv.contentEditable = true;
 const blocklyDiv = document.getElementById('blocklyDiv');
 const ws = Blockly.inject(blocklyDiv, {
   toolbox: toolbox, 
