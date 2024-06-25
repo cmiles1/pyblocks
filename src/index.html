@@ -23,19 +23,18 @@
       </div>
       <div>
         <button class="button">Help</button>
-        <button class="button" py-click="run_pyscript">Run</button>
+        <button class="button run">Run</button>
         <button class="button">Stop</button>
       </div>
     </div>
-    <script type="py" src="main.py" config="pyscript.toml"></script>
-
+    <script src="worker.js" type="module"></script>
   </section>
 
   <div id="pageContainer">
     <div id="blocklyDiv"></div>
     <div id="outputPane">
-      <pre id="generatedCode"><code></code></pre>
-      <div id="output"></div>
+      <pre id="generatedCode"><code id="pythonArea"></code></pre>
+      <div id="outputArea"></div>
     </div>
 
   </div>

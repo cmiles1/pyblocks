@@ -12,8 +12,12 @@ import {save, load} from './serialization';
 import {toolbox} from './toolbox';
 
 // Register the blocks and generator with Blockly
+pythonGenerator.INDENT = '    '; // 4 spaces is required by PyScript
+
 Blockly.common.defineBlocks(blocks);
 Object.assign(pythonGenerator.forBlock, forBlock);
+
+
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode').firstChild;
@@ -26,12 +30,12 @@ const ws = Blockly.inject(blocklyDiv, {
 
 const workspaceToPython = () => {
   const code = pythonGenerator.workspaceToCode(ws);
-  codeDiv.innerText = code;
+  codeDiv.textContent = code;
 };
 
 // Load the initial state from storage and run the code.
 load(ws);
-
+workspaceToPython();
 
 // Every time the workspace changes state, save the changes to storage.
 ws.addChangeListener((e) => {

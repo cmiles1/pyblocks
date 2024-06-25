@@ -1,3 +1,4 @@
-name = "PyScript Jokes"
-description = "A simple application showing how to install and use a package in PyScript."
-packages = ["pyjokes"]
+name = "PyBlocks"
+description = "An engaging drag-and-drop visual programming platform focused on Python semantics."
+packages = []
+

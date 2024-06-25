@@ -32,9 +32,10 @@ const config = {
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/pyscript', to: 'pyscript' },
-        { from: 'src/style.css', to: 'style.css' }, // Add this line
-        { from: 'src/pyscript.toml', to: 'pyscript.toml' }, // Add this line
-        { from: 'src/main.py', to: 'main.py' },
+        { from: 'src/style.css', to: 'style.css' },
+        { from: 'src/pyscript.toml', to: 'pyscript.toml' },
+        { from: 'src/worker.js', to: 'worker.js' },
+        { from: 'src/worker.py', to: 'worker.py' },
         { from: 'node_modules/blockly/media', to: 'media'}
       ],
     }),
