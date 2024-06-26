@@ -15,42 +15,21 @@ body {
   height: 5vh;
 }
 
-.toolbar {
-  background-color: #333333;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  height: 5vh;
-}
-
-.editor-container {
-  display: flex;
-  height: 80vh;
-}
-
-.editor {
-  background-color: #1e1e1e;
-  color: #ffffff;
-  padding: 20px;
-  flex: 1;
-  border-left: 5px solid #4CAF50;
-}
-
-#outputArea {
-  background-color: #1e1e1e;
-  color: #ffffff;
-  padding: 20px;
-  flex: 1;
-  border-left: 5px solid #FFC107;
-  overflow-y: auto; 
-}
 
 .footer {
   background-color: #1e1e1e;
   padding: 10px;
   text-align: center;
   box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+  height: 5vh;
+}
+
+.navbar {
+  background-color: #333333;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   height: 5vh;
 }
 
@@ -137,17 +116,27 @@ code {
   flex: 0 0 400px;
   overflow: auto;
   margin: 1rem;
+  background-color: #1e1e1e;
 }
 
 #generatedCode {
   height: 50%;
-  background-color: #324E7B;
+  padding: 10px;
+  border-left: 5px solid #FFC107;
+  border-bottom: 5px solid #333333;
+}
+
+#outputArea {
+  color: #ffffff;
+  padding: 10px;
+  flex: 1;
+  overflow-y: auto;
+  border-left: 5px solid #FFC107;
 }
 
 
 #pythonArea {
   color: #ffffff;
-  overflow-y: scroll;
   white-space: pre-wrap;
   outline: none;
 }

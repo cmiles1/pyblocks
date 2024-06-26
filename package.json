@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@pyscript/core": "^0.4.51",
-    "blockly": "^11.0.0"
+    "blockly": "^11.0.0",
+    "highlight.js": "^11.9.0"
   }
 }

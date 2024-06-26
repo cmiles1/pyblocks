@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PyBlocks</title>
+  <link rel="stylesheet" type="text/css" href="editorStyles/vs2015.css">
   <link rel="stylesheet" type="text/css" href="style.css">
   <script type="module" src="pyscript/core.js"></script>
 </head>
@@ -16,7 +17,7 @@
   </div>
 
   <section class="pyscript">
-    <div class="toolbar">
+    <div class="navbar">
       <div>
         <button class="button">Save</button>
         <button class="button">Settings</button>
@@ -32,7 +33,9 @@
   <div id="pageContainer">
     <div id="blocklyDiv"></div>
     <div id="outputPane">
-      <pre id="generatedCode"><code id="pythonArea"></code></pre>
+      <pre id="generatedCode" spellcheck="false" autocapitalize="false" translate="no">
+        <code class="hljs" id="pythonArea"></code>
+      </pre>
       <pre id="outputArea"></pre>
     </div>
 

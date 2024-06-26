@@ -11,6 +11,10 @@ import {pythonGenerator} from 'blockly/python';
 import {save, load} from './serialization';
 import {toolbox} from './toolbox';
 
+
+const hljs = require('highlight.js/lib/core');
+hljs.registerLanguage('python', require('highlight.js/lib/languages/python'));
+
 // Register the blocks and generator with Blockly
 pythonGenerator.INDENT = '    '; // 4 spaces is required by PyScript
 
@@ -21,17 +25,23 @@ Object.assign(pythonGenerator.forBlock, forBlock);
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode').firstChild;
-codeDiv.contentEditable = true;
 const blocklyDiv = document.getElementById('blocklyDiv');
 const ws = Blockly.inject(blocklyDiv, {
   toolbox: toolbox, 
   media: './media',
 });
 
-
+/* Translates the workspace to Python code and displays it in the codeDiv. */
 const workspaceToPython = () => {
+  // Python generator : Blockly workspace -> Python code
   const code = pythonGenerator.workspaceToCode(ws);
-  codeDiv.textContent = code;
+  // Apply syntax highlighting
+  const highlightedCode = hljs.highlight(
+    code,
+    { language: 'python' }
+  ).value
+  // todo: save into storage as well; load code from there
+  codeDiv.innerHTML = highlightedCode;
 };
 
 // Load the initial state from storage and run the code.

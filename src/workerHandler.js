@@ -44,10 +44,13 @@ runButton.addEventListener('click', async () => {
         
         // lock mechanism
         isScriptRunning = true;
-        
+
+        // Fetch the code to run
+        var text = codeDiv.textContent; // todo: load from local storage
+
         // call the worker python script
         try {
-            var x = await worker.sync.run(codeDiv.textContent);
+            var x = await worker.sync.run(text);
         } catch (e) {
             x = e;
         }
