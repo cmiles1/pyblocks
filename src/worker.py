@@ -1,3 +1,5 @@
+global_vars = globals().copy()
+
 from pyscript import sync, document
 from pyweb import pydom
 import sys
@@ -60,7 +62,6 @@ class CustomStdin:
 custom_stdin = CustomStdin()
 sys.stdin = custom_stdin
 
-global_vars = globals().copy()
 
 # Note : This function contains the editor's entry point to Python
 def run(script: str):
