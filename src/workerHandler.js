@@ -3,7 +3,6 @@ import { PyWorker } from './pyscript/core.js';
 // Worker for running Python code through PyScript
 
 const runButton = document.querySelector('.run');
-const codeDiv = document.querySelector("#pythonArea");
 const outputDiv = document.querySelector("#outputArea");
 
 var isScriptRunning = false;
@@ -40,13 +39,13 @@ worker.sync.waitForClickEvent = waitForClickEvent;
 runButton.addEventListener('click', async () => { 
     // Only allow a single instance of the script to run at a time
     if (!isScriptRunning) {
-        runButton.innerHTML = 'Stop';
+        runButton.innerText = 'Stop';
         
         // lock mechanism
         isScriptRunning = true;
 
         // Fetch the code to run
-        var text = codeDiv.textContent; // todo: load from local storage
+        const text = localStorage.getItem('pythonCode');
 
         // call the worker python script
         try {
@@ -59,14 +58,15 @@ runButton.addEventListener('click', async () => {
         
         // unlock mechanism
         isScriptRunning = false;
-        runButton.innerHTML = 'Run';
+        runButton.innerText = 'Run';
         outputDiv.insertAdjacentHTML('beforeend', '<hr><br>');
     }
     else {
         // Kill the worker if not currently being killed
         if (isAwaitingTermination) {return;}
         isAwaitingTermination = true;
-
+        runButton.innerText = 'Stopping...';
+        
         await worker.terminate();
 
         // Clear the latest input boxes in the console
@@ -80,7 +80,7 @@ runButton.addEventListener('click', async () => {
         });
 
         // Let the user know the script has been stopped
-        outputDiv.insertAdjacentHTML('beforeend', '<code>Program halted by user</code><br>');
+        outputDiv.insertAdjacentHTML('beforeend', '<code>Program halted by user</code><br><hr><br>');
 
         // Reinitialize the worker
         worker = await PyWorker(
@@ -91,7 +91,7 @@ runButton.addEventListener('click', async () => {
         worker.sync.waitForClickEvent = waitForClickEvent;
 
         // unlock the button
-        runButton.innerHTML = 'Run';
+        runButton.innerText = 'Run';
         isScriptRunning = false;
         isAwaitingTermination = false;
     }

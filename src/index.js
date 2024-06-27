@@ -24,7 +24,7 @@ Object.assign(pythonGenerator.forBlock, forBlock);
 
 
 // Set up UI elements and inject Blockly
-const codeDiv = document.getElementById('generatedCode').firstChild;
+const codeDiv = document.getElementById('pythonArea');
 const blocklyDiv = document.getElementById('blocklyDiv');
 const ws = Blockly.inject(blocklyDiv, {
   toolbox: toolbox, 
@@ -35,12 +35,16 @@ const ws = Blockly.inject(blocklyDiv, {
 const workspaceToPython = () => {
   // Python generator : Blockly workspace -> Python code
   const code = pythonGenerator.workspaceToCode(ws);
+  
+  localStorage.setItem('pythonCode', code);
+
   // Apply syntax highlighting
   const highlightedCode = hljs.highlight(
     code,
     { language: 'python' }
   ).value
-  // todo: save into storage as well; load code from there
+
+  // todo: ensure sanitization
   codeDiv.innerHTML = highlightedCode;
 };
 
