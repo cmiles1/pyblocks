@@ -1,7 +1,7 @@
 global_vars = globals().copy()
 
 from pyscript import sync, document
-from pyweb import pydom
+from pyweb import pydom # type: ignore
 import sys
 from io import StringIO
 import time

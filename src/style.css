@@ -1,94 +1,84 @@
+:root {
+  --background-color: #2b2b2b;
+  --header-footer-color: #1e1e1e;
+  --navbar-color: #5d5d5d;
+  --button-color: #4CAF50;
+  --button-hover-color: #45a049;
+  --handle-color: #ccc;
+  --handle-hover-color: #fff;
+  --border-highlight: #FFC107;
+  --text-color: #ffffff;
+  --disabled-color: #f1f1f1;
+  --disabled-text-color: #1e1e1e;
+}
+
 body {
-  background-color: #2b2b2b;
-  color: #ffffff;
+  background-color: var(--background-color);
+  color: var(--text-color);
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
   max-width: 100vw;
+  padding: 0;
 }
 
-.header {
-  background-color: #1e1e1e;
-  padding: 10px;
-  text-align: center;
+.header, .footer {
+  background-color: var(--header-footer-color);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   height: 5vh;
-}
-
-
-.footer {
-  background-color: #1e1e1e;
   padding: 10px;
   text-align: center;
-  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
-  height: 5vh;
 }
 
 .navbar {
-  background-color: #333333;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
+  background-color: var(--navbar-color);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  height: 5vh;
-}
-
-.button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: large;
-  font: Arial, sans7-serif, bold;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.button:hover {
-  background-color: #45a049;
-}
-
-.input-div {
   display: flex;
-  justify-content: space-evenly;
-  margin: 5px 5px 5px 0px;
+  height: 5vh;
+  justify-content: space-between;
+  padding: 10px;
 }
 
-.submit-button {
-  background-color: #4CAF50;
-  color: white;
+.button, .submit-button {
+  background-color: var(--button-color);
   border: none;
+  border-radius: 4px;
+  color: var(--text-color);
+  cursor: pointer;
+  display: inline-block;
+  font-size: large;
+  margin: 4px 2px;
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
-  font-size: large;
-  margin: 4px 5px;
-  cursor: pointer;
-  border-radius: 4px;
-  vertical-align: top;
-  box-sizing: border-box;
 }
 
-.user-input  {
-  border: none;
-  padding: 2px 4px;
-  text-decoration: none;
-  display: inline-block;
-  font-size: medium;
-  margin: 4px 1px 5px 1px;
-  border-radius: 4px;
-  resize: vertical;
-  flex: 2 2 auto;
+.button:hover, .submit-button:hover {
+  background-color: var(--button-hover-color);
 }
+
+.handle {
+  cursor: ew-resize;
+  width: 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.grip {
+  background-color: var(--handle-color);
+  height: 60px;
+  width: 5px;
+  border-radius: 50px;
+}
+
+.handle:hover .grip {
+  background-color: var(--handle-hover-color);
+}
+
 .user-input:disabled {
-  background-color: #f1f1f1;
-  color:#1e1e1e;
+  background-color: var(--disabled-color);
   caret-color: transparent;
+  color: var(--disabled-text-color);
 }
 
 pre,
@@ -98,45 +88,73 @@ code {
 
 #pageContainer {
   display: flex;
-  width: 100%;
+  height: 80vh;
   max-width: 100vw;
-  height: 100vh;
+  width: 100%;
 }
 
 #blocklyDiv {
-  flex-basis: 100%;
-  height: 100%;
-  min-width: 600px;
+  flex: 5 5 60%;
+  min-width: 20vw;
+  margin-right: 0.5rem;
 }
 
 #outputPane {
+  background-color: var(--header-footer-color);
   display: flex;
+  flex: 5 5 40%;
   flex-direction: column;
-  width: 400px;
-  flex: 0 0 400px;
-  overflow: auto;
   margin: 1rem;
-  background-color: #1e1e1e;
+  margin-left: 0.5rem;
+  overflow: auto;
+  width: 20vw;
 }
 
 #generatedCode {
+  border-bottom: 5px solid var(--background-color);
+  border-left: 5px solid var(--border-highlight);
   height: 50%;
   padding: 10px;
-  border-left: 5px solid #FFC107;
-  border-bottom: 5px solid #333333;
 }
 
 #outputArea {
-  color: #ffffff;
-  padding: 10px;
+  border-left: 5px solid var(--border-highlight);
+  color: var(--text-color);
   flex: 1;
   overflow-y: auto;
-  border-left: 5px solid #FFC107;
+  padding: 10px;
+}
+
+#pythonArea {
+  color: var(--text-color);
+  outline: none;
+  white-space: pre-wrap;
+}
+
+.blocklySvg {
+  background-color: var(--background-color);
+}
+
+.blocklyToolboxDiv {
+  background-color: #666;
+}
+
+.blocklyMainBackground {
+  stroke-width: 0;
 }
 
 
-#pythonArea {
-  color: #ffffff;
-  white-space: pre-wrap;
-  outline: none;
+
+
+.button:focus, .submit-button:focus, .user-input:focus {
+  outline: 4px solid var(--button-hover-color);
+}
+
+.error {
+  border: 2px solid red;
+  background-color: #ffdddd;
+  color: red;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
 }

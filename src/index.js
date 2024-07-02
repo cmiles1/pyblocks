@@ -11,7 +11,6 @@ import {pythonGenerator} from 'blockly/python';
 import {save, load} from './serialization';
 import {toolbox} from './toolbox';
 
-
 const hljs = require('highlight.js/lib/core');
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'));
 
@@ -20,8 +19,7 @@ pythonGenerator.INDENT = '    '; // 4 spaces is required by PyScript
 
 Blockly.common.defineBlocks(blocks);
 Object.assign(pythonGenerator.forBlock, forBlock);
-
-
+console.log(pythonGenerator.forBlock);
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('pythonArea');
@@ -36,7 +34,7 @@ const workspaceToPython = () => {
   // Python generator : Blockly workspace -> Python code
   const code = pythonGenerator.workspaceToCode(ws);
   
-  localStorage.setItem('pythonCode', code);
+  localStorage?.setItem('pythonCode', code);
 
   // Apply syntax highlighting
   const highlightedCode = hljs.highlight(
@@ -73,4 +71,19 @@ ws.addChangeListener((e) => {
     return;
   }
   workspaceToPython();
+});
+
+
+
+
+/* 
+Rescaling
+*/
+
+
+
+document.getElementById('resize').addEventListener('drag', function (e) {
+  console.log(e.clientX);
+  document.getElementById('blocklyDiv').style.width = e.clientX + '%';
+  document.getElementById('outputPane').style.width = (e.innerWidth - e.clientX) + '%';
 });

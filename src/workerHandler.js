@@ -17,11 +17,10 @@ var worker = await PyWorker(
 export const waitForClickEvent = async () => {
     // Waits until the input box's submit button is clicked
     var btn = document.querySelector('.submit-button');
-    var textarea = document.querySelector('.user-input:enabled');
     var data = null;
-
+    
     btn.addEventListener('click', async () => {
-        data = textarea.value;
+        data = localStorage?.getItem('pythonCode');
         textarea.disabled = true;
         btn.remove();
     });

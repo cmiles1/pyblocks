@@ -14,6 +14,8 @@ export const forBlock = Object.create(null);
 forBlock['add_text'] = function (block, generator) {
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "";
   // Generate the function call for this block.
-  const code = `#${text}\n`;
+  const code = `print(${text})\n`;
   return code;
 };
+
+
