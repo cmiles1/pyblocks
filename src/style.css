@@ -93,10 +93,19 @@ code {
   width: 100%;
 }
 
-#blocklyDiv {
+#blocklyArea {
   flex: 5 5 60%;
   min-width: 20vw;
   margin-right: 0.5rem;
+  display: block;
+}
+
+#blocklyDiv {
+  min-width: 20vw;
+  margin-right: 0.5rem;
+  /* Take up 100% of flex parent space - not the entire screen */
+  width: 100%;
+  height: 100%;
 }
 
 #outputPane {
@@ -141,20 +150,4 @@ code {
 
 .blocklyMainBackground {
   stroke-width: 0;
-}
-
-
-
-
-.button:focus, .submit-button:focus, .user-input:focus {
-  outline: 4px solid var(--button-hover-color);
-}
-
-.error {
-  border: 2px solid red;
-  background-color: #ffdddd;
-  color: red;
-  padding: 10px;
-  margin: 5px;
-  border-radius: 5px;
 }

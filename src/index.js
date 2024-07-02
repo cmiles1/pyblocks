@@ -77,13 +77,48 @@ ws.addChangeListener((e) => {
 
 
 /* 
-Rescaling
+Rescaling between the workspace and the output pane
 */
+const resizeHandle = document.getElementById('resize');
+const outputPane = document.getElementById('outputPane');
+const pageContainer = document.getElementById('pageContainer');
+const blocklyArea = document.getElementById('blocklyArea');
 
 
+resizeHandle.addEventListener('mousedown', function (e) {
+  e.preventDefault();
 
-document.getElementById('resize').addEventListener('drag', function (e) {
-  console.log(e.clientX);
-  document.getElementById('blocklyDiv').style.width = e.clientX + '%';
-  document.getElementById('outputPane').style.width = (e.innerWidth - e.clientX) + '%';
+  document.addEventListener('mousemove', resize);
+  document.addEventListener('mouseup', stopResize);
 });
+
+function resize(e) {
+  const containerWidth = pageContainer.offsetWidth;
+  const newBlocklyWidth = (e.clientX / containerWidth) * 100;
+  const newOutputPaneWidth = 100 - newBlocklyWidth;
+
+  blocklyDiv.style.flex = `0 0 ${newBlocklyWidth}%`;
+  outputPane.style.flex = `0 0 ${newOutputPaneWidth}%`;
+
+  var element = blocklyArea;
+  let x = 0;
+  let y = 0;
+  do {
+    x += element.offsetLeft;
+    y += element.offsetTop;
+    element = element.offsetParent;
+  } while (element);
+  // Position blocklyDiv over blocklyArea.
+  blocklyDiv.style.left = x + 'px';
+  blocklyDiv.style.top = y + 'px';
+  blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+  blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+  Blockly.svgResize(ws);
+}
+
+function stopResize() {
+  document.removeEventListener('mousemove', resize);
+  document.removeEventListener('mouseup', stopResize);
+}
+
+
