@@ -36,7 +36,7 @@ const config = {
         { from: 'src/pyscript.toml', to: 'pyscript.toml' },
         { from: 'src/workerHandler.js', to: 'workerHandler.js' },
         { from: 'src/worker.py', to: 'worker.py' },
-        { from: 'node_modules/blockly/media', to: 'media'},
+        { from: 'src/media', to: 'media'},
         { from: 'node_modules/highlight.js/styles', to: 'editorStyles'},
       ],
     }),

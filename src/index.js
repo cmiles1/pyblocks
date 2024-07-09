@@ -11,6 +11,10 @@ import {pythonGenerator} from 'blockly/python';
 import {save, load} from './serialization';
 import {toolbox} from './toolbox';
 
+// Plugins
+import {FixedEdgesMetricsManager} from '@blockly/fixed-edges';
+import {Backpack} from './backpack';
+
 const hljs = require('highlight.js/lib/core');
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'));
 
@@ -19,15 +23,59 @@ pythonGenerator.INDENT = '    '; // 4 spaces is required by PyScript
 
 Blockly.common.defineBlocks(blocks);
 Object.assign(pythonGenerator.forBlock, forBlock);
-console.log(pythonGenerator.forBlock);
+
+
+FixedEdgesMetricsManager.setFixedEdges({
+  top: true,
+  left: true,
+});
+
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('pythonArea');
 const blocklyDiv = document.getElementById('blocklyDiv');
 const ws = Blockly.inject(blocklyDiv, {
-  toolbox: toolbox, 
+  grid: {
+    spacing: 40,
+    length: 3,
+    colour: '#ccc',
+    snap: false
+  },
   media: './media',
+  move: {
+    scrollbars: true,
+    drag: true,
+    wheel: true
+  },
+  plugins: {
+    metricsManager: FixedEdgesMetricsManager,
+    backpack: Backpack
+  },
+  toolbox: toolbox, 
+  trashcan: true,
+  zoom: {
+    controls: true,
+    startScale: 1.0,
+    maxScale: 3,
+    minScale: 0.3,
+    scaleSpeed: 1.2,
+    wheel: true,
+    maxScale: 10,
+  },
 });
+
+const backpackOptions = {
+  allowEmptyBackpackOpen: false,
+  useFilledBackpackImage: false,
+  contextMenu: {
+    emptyBackpack: false,
+    removeFromBackpack: true,
+    copyToBackpack: true,
+  },
+};
+// Initialize backpack
+const backpack = new Backpack(ws, backpackOptions);
+backpack.init();
 
 /* Translates the workspace to Python code and displays it in the codeDiv. */
 const workspaceToPython = () => {
@@ -73,33 +121,60 @@ ws.addChangeListener((e) => {
   workspaceToPython();
 });
 
-
-
-
 /* 
 Rescaling between the workspace and the output pane
 */
-const resizeHandle = document.getElementById('resize');
+const horizontalResizeHandle = document.getElementById('resize');
 const outputPane = document.getElementById('outputPane');
 const pageContainer = document.getElementById('pageContainer');
 const blocklyArea = document.getElementById('blocklyArea');
 
-
-resizeHandle.addEventListener('mousedown', function (e) {
+/* Drag support */
+horizontalResizeHandle.addEventListener('mousedown', function (e) {
   e.preventDefault();
 
-  document.addEventListener('mousemove', resize);
-  document.addEventListener('mouseup', stopResize);
+  document.addEventListener('mousemove', horizontalResize);
+  document.addEventListener('mouseup', stopHorizontalResize);
 });
 
-function resize(e) {
+/* Mobile drag support */
+horizontalResizeHandle.addEventListener('touchstart', function (e) {
+  e.preventDefault();
+
+  document.addEventListener('touchmove', horizontalResize);
+  document.addEventListener('touchend', stopHorizontalResizeTouch);
+});
+
+
+function horizontalResize(e) {
+  var clientX = e.clientX??e.touches[0].clientX;
   const containerWidth = pageContainer.offsetWidth;
-  const newBlocklyWidth = (e.clientX / containerWidth) * 100;
-  const newOutputPaneWidth = 100 - newBlocklyWidth;
+  var newBlocklyWidth = (clientX / containerWidth) * 100;
+  var old = newBlocklyWidth;
+  // Ensure the blockly area is at least 20% and at most 80% of the page
+  newBlocklyWidth = Math.min(Math.max(newBlocklyWidth, 15), 80);
+  if (old !== newBlocklyWidth) {
+    if (old < newBlocklyWidth) {
+      // hide blocklyArea
+      blocklyArea.style.display = 'none';
+    }
+    else {
+      outputPane.style.display = 'none';
+      newBlocklyWidth = 97;
+    }
+  }
+  else {
+    blocklyArea.style.display = 'block';
+    outputPane.style.display = 'flex';
+  }
+  // Resize the blockly area and the output pane
+  blocklyArea.style.flex = `0 0 ${newBlocklyWidth}%`;
+  outputPane.style.width = `${100}%`;
 
-  blocklyDiv.style.flex = `0 0 ${newBlocklyWidth}%`;
-  outputPane.style.flex = `0 0 ${newOutputPaneWidth}%`;
+  adjustBlocklyDiv();
+}
 
+function adjustBlocklyDiv() {
   var element = blocklyArea;
   let x = 0;
   let y = 0;
@@ -116,9 +191,16 @@ function resize(e) {
   Blockly.svgResize(ws);
 }
 
-function stopResize() {
-  document.removeEventListener('mousemove', resize);
-  document.removeEventListener('mouseup', stopResize);
+function stopHorizontalResize() {
+  document.removeEventListener('mousemove', horizontalResize);
+  document.removeEventListener('mouseup', stopHorizontalResize);
 }
 
+function stopHorizontalResizeTouch() {
+  document.removeEventListener('touchmove', horizontalResize);
+  document.removeEventListener('touchend', stopHorizontalResizeTouch);
+}
 
+window.addEventListener('resize', adjustBlocklyDiv);
+window.addEventListener('orientationchange', adjustBlocklyDiv);
+adjustBlocklyDiv();

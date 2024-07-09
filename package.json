@@ -25,6 +25,8 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
+    "@blockly/fixed-edges": "^5.0.3",
+    "@blockly/workspace-backpack": "^6.0.3",
     "@pyscript/core": "^0.4.51",
     "blockly": "^11.0.0",
     "highlight.js": "^11.9.0"
