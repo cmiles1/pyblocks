@@ -80,18 +80,18 @@ backpack.init();
 /* Translates the workspace to Python code and displays it in the codeDiv. */
 const workspaceToPython = () => {
   // Python generator : Blockly workspace -> Python code
+  //const code = pythonGenerator.workspaceToCode(ws);
+  // try to insert an incomplete html tag to see if it is sanitized
   const code = pythonGenerator.workspaceToCode(ws);
-  
   localStorage?.setItem('pythonCode', code);
-
+  
   // Apply syntax highlighting
   const highlightedCode = hljs.highlight(
     code,
     { language: 'python' }
-  ).value
+  ).value 
+  updateLineNumbers(highlightedCode);
 
-  // todo: ensure sanitization
-  codeDiv.innerHTML = highlightedCode;
 };
 
 // Load the initial state from storage and run the code.
@@ -120,6 +120,13 @@ ws.addChangeListener((e) => {
   }
   workspaceToPython();
 });
+
+/** Updates the line numbers for the generated code */
+function updateLineNumbers(code) {
+  const lines = code.split('\n');
+  codeDiv.innerHTML = lines.map(line => `<div>${line}\n</div>`).join('');
+}
+
 
 /* 
 Rescaling between the workspace and the output pane

@@ -24,7 +24,7 @@ body {
 .header, .footer {
   background-color: var(--header-footer-color);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  min-height: 5vh;
+  height: 5vh;
   padding: 10px;
   text-align: center;
 }
@@ -125,6 +125,27 @@ code {
   border-left: 5px solid var(--border-highlight);
   height: 50%;
   padding: 10px;
+  counter-reset: linenumber;
+  padding-left: 1em; /* Adjust padding to make room for line numbers */
+}
+#generatedCode code {
+  display: block;
+  position: relative;
+}
+#generatedCode code > div {
+  counter-increment: linenumber;
+  position: relative;
+  padding-left: 2em; /* Adjust padding to make room for line numbers */
+  padding-bottom: 0.5em;
+}
+
+#generatedCode code > div::before {
+  content: counter(linenumber);
+  position: absolute;
+  left: 0;
+  width: 1em;
+  text-align: right;
+  color: gray;
 }
 
 #outputArea {
@@ -139,6 +160,8 @@ code {
   color: var(--text-color);
   outline: none;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
+  padding: 0px;
 }
 
 .blocklySvg {
