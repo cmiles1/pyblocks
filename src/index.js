@@ -11,9 +11,13 @@ import {pythonGenerator} from 'blockly/python';
 import {save, load} from './serialization';
 import {toolbox} from './toolbox';
 
-// Plugins
-import {FixedEdgesMetricsManager} from '@blockly/fixed-edges';
+// Blockly Plugins
 import {Backpack} from './backpack';
+import {
+  ScrollOptions,
+} from '@blockly/plugin-scroll-options';
+import {PyBlocksMetricsManager, PyBlocksScrollBlockDragger} from './metrics';
+
 
 const hljs = require('highlight.js/lib/core');
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'));
@@ -25,19 +29,23 @@ Blockly.common.defineBlocks(blocks);
 Object.assign(pythonGenerator.forBlock, forBlock);
 
 
-FixedEdgesMetricsManager.setFixedEdges({
+
+
+// Sets the edges that will be fixed in the workspace
+// (i.e. other directions can be scrolled infinitely)
+PyBlocksMetricsManager.setFixedEdges({
   top: true,
   left: true,
 });
 
-
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('pythonArea');
 const blocklyDiv = document.getElementById('blocklyDiv');
+
 const ws = Blockly.inject(blocklyDiv, {
   grid: {
-    spacing: 40,
-    length: 3,
+    spacing: 50,
+    length: 0.5,
     colour: '#ccc',
     snap: false
   },
@@ -48,8 +56,9 @@ const ws = Blockly.inject(blocklyDiv, {
     wheel: true
   },
   plugins: {
-    metricsManager: FixedEdgesMetricsManager,
-    backpack: Backpack
+    backpack: Backpack,
+    blockDragger: PyBlocksScrollBlockDragger,
+    metricsManager: PyBlocksMetricsManager,
   },
   toolbox: toolbox, 
   trashcan: true,
@@ -73,9 +82,31 @@ const backpackOptions = {
     copyToBackpack: true,
   },
 };
-// Initialize backpack
-const backpack = new Backpack(ws, backpackOptions);
-backpack.init();
+
+/** Initialize Blockly plugins */
+function initializePlugins() {
+
+  const backpack = new Backpack(ws, backpackOptions);
+  backpack.init();
+
+  const scrollOptions = new ScrollOptions(ws);
+  scrollOptions.init({
+    enableWheelScroll: true, 
+    enableEdgeScroll: true, 
+    edgeScrollOptions: {
+      // How far the mouse/dragged block must be from the edge of the workspace to start scrolling
+      // Note that this functionality is overriden by metrics.js::PyBlocksScrollBlockDragger
+      slowBlockStartDistance: 10, 
+      slowMouseStartDistance: 10,
+      fastBlockStartDistance: ws.toolbox_.width_ / ws.scale, 
+      fastMouseStartDistance: ws.toolbox_.width_ / ws.scale
+    }
+  });
+
+}
+initializePlugins();
+
+
 
 /* Translates the workspace to Python code and displays it in the codeDiv. */
 const workspaceToPython = () => {
