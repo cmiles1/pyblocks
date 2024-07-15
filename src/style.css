@@ -28,6 +28,7 @@ body {
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;
+  
 }
 
 .navbar {
@@ -42,16 +43,17 @@ body {
 .button, .submit-button {
   background-color: var(--button-color);
   border: none;
-  border-radius: 4px;
+  border-radius: 16px;
   color: var(--text-color);
   cursor: pointer;
   display: inline-block;
-  font-size: large;
   margin: 4px 2px;
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
+  font-size: clamp(8px, 2vw, 32px);  
 }
+
 
 .button:hover, .submit-button:hover {
   background-color: var(--button-hover-color);
@@ -63,7 +65,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2vw;
+  min-width: 2vw;
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -112,14 +114,18 @@ pre,
 code {
   overflow: auto;
 }
+.injectionDiv {
+  min-height: 378px;
+}
 
 #pageContainer {
   display: flex;
   height: 80vh;
   max-width: 100vw;
   width: 100%;
-  min-height: 378px;
   max-height: 80vh;
+  overflow-y: hidden;
+
 }
 
 #blocklyArea {
@@ -143,6 +149,7 @@ code {
   width: 20vw;
   height: 100%;
   padding-right: 2em;
+  font-size: clamp(8px, 2vw, 25px);
 }
 
 #generatedCode {
@@ -191,36 +198,30 @@ code {
   overflow-wrap: break-word;
   padding: 0px;
 }
-/*
-.blocklySvg {
-  background-color: var(--background-color);
-}
-
-.blocklyToolboxDiv {
-  background-color: var(--navbar-color);
-  color: var(--text-color);
-}
-
-.blocklyMainBackground {
-  stroke-width: 0;
-}
-
-.blocklyFlyoutBackground {
-  fill: var(--background-color);
-}
-
-*/
 
 
 
-/* 
-<g class="blocklyZoom blocklyZoomOut" transform="translate(0, 77)"><clipPath id="blocklyZoomoutClipPath7487286933320214"><rect width="32" height="32"></rect></clipPath><image width="96" height="124" x="-64" y="-92" clip-path="url(#blocklyZoomoutClipPath7487286933320214)" xlink:href="./media/sprites.png"></image></g>
-ZoomOut -> clipPath -> rect
-*/
-.blocklyZoom {
+.blocklyZoom, .blocklyTrash image {
   cursor: pointer;
+  opacity: 0.5;
+  filter: invert(0.8) brightness(1);
 }
-.blocklyTrash {
+
+.blocklyBackpack {
   cursor: pointer;
+  opacity: 0.5;
+  filter: invert(0.2);
+}
+.blocklyBackpack:hover {
+  filter: invert(0) brightness(1);
+  opacity: 1.0;
+}
+
+.blocklyZoom:hover  {
+  filter: invert(0);
+  opacity: 1.0;
+}
+.blocklyTrash image:hover {
+  filter: invert(1) brightness(1);
   opacity: 1.0;
 }

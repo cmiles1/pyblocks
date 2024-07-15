@@ -27,6 +27,7 @@
   "dependencies": {
     "@blockly/fixed-edges": "^5.0.3",
     "@blockly/plugin-scroll-options": "^6.0.3",
+    "@blockly/theme-dark": "^7.0.3",
     "@blockly/workspace-backpack": "^6.0.3",
     "@pyscript/core": "^0.4.51",
     "blockly": "^11.0.0",

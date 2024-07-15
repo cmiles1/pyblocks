@@ -17,6 +17,8 @@ import {
   ScrollOptions,
 } from '@blockly/plugin-scroll-options';
 import {PyBlocksMetricsManager, PyBlocksScrollBlockDragger} from './metrics';
+import DarkTheme from '@blockly/theme-dark';
+
 
 
 const hljs = require('highlight.js/lib/core');
@@ -41,9 +43,9 @@ PyBlocksMetricsManager.setFixedEdges({
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('pythonArea');
 const blocklyDiv = document.getElementById('blocklyDiv');
-
+console.log(Blockly.Themes);
 const ws = Blockly.inject(blocklyDiv, {
-  theme: Blockly.Themes.Zelos,
+  theme: DarkTheme,
   grid: {
     spacing: 50,
     length: 0.5,
