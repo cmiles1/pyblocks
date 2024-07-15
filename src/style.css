@@ -24,9 +24,10 @@ body {
 .header, .footer {
   background-color: var(--header-footer-color);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  height: 5vh;
-  padding: 10px;
+  min-height: 5vh;
   text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .navbar {
@@ -56,24 +57,48 @@ body {
   background-color: var(--button-hover-color);
 }
 
-.handle {
+.horizHandle {
   cursor: ew-resize;
-  height: 20%;
-  margin: auto;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.5vw;
+  width: 2vw;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-.grip {
+.hgrip {
   background-color: var(--handle-color);
   height: 60px;
   width: 5px;
   border-radius: 50px;
 }
 
-.handle:hover .grip {
+.horizHandle:hover .hgrip {
+  background-color: var(--handle-hover-color);
+}
+
+.vertHandle {
+  cursor: ns-resize;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5vh;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-bottom: 5px solid var(--background-color);
+  user-select: none;
+}
+.vgrip {
+  background-color: var(--handle-color);
+  width: 60px;
+  height: 5px;
+  border-radius: 50px;
+}
+
+.vertHandle:hover .vgrip {
   background-color: var(--handle-hover-color);
 }
 
@@ -93,50 +118,50 @@ code {
   height: 80vh;
   max-width: 100vw;
   width: 100%;
+  min-height: 378px;
+  max-height: 80vh;
 }
 
 #blocklyArea {
   flex: 5 5 60%;
   width: 20vw;
-  margin-right: 0.5rem;
+  margin-right: 5px;
   display: block;
 }
 
 #blocklyDiv {
-  margin-right: 0.5rem;
-  /* Take up 100% of flex parent space - not the entire screen */
+  margin-right: 5px;
   width: 100%;
   height: 100%;
 }
 
 #outputPane {
-  background-color: var(--header-footer-color);
   display: flex;
   flex-direction: column;
-  margin: 1rem;
-  margin-left: 0.5rem;
-  overflow: auto;
+  margin-left: 0.5em;
+  overflow: hidden;
   width: 20vw;
-  max-height: 80vh;
+  height: 100%;
+  padding-right: 2em;
 }
 
 #generatedCode {
-  border-bottom: 5px solid var(--background-color);
   border-left: 5px solid var(--border-highlight);
+  background-color: var(--header-footer-color);
   height: 50%;
   padding: 10px;
   counter-reset: linenumber;
-  padding-left: 1em; /* Adjust padding to make room for line numbers */
+  padding-left: 1em;
+  margin-bottom: 0px;
 }
 #generatedCode code {
   display: block;
-  position: relative;
 }
 #generatedCode code > div {
   counter-increment: linenumber;
   position: relative;
   padding-left: 2em; /* Adjust padding to make room for line numbers */
-  padding-bottom: 0.5em;
+  padding-bottom: 0.1em;
 }
 
 #generatedCode code > div::before {
@@ -154,6 +179,9 @@ code {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  background-color: var(--header-footer-color);
 }
 
 #pythonArea {
@@ -163,7 +191,7 @@ code {
   overflow-wrap: break-word;
   padding: 0px;
 }
-
+/*
 .blocklySvg {
   background-color: var(--background-color);
 }
@@ -179,4 +207,20 @@ code {
 
 .blocklyFlyoutBackground {
   fill: var(--background-color);
+}
+
+*/
+
+
+
+/* 
+<g class="blocklyZoom blocklyZoomOut" transform="translate(0, 77)"><clipPath id="blocklyZoomoutClipPath7487286933320214"><rect width="32" height="32"></rect></clipPath><image width="96" height="124" x="-64" y="-92" clip-path="url(#blocklyZoomoutClipPath7487286933320214)" xlink:href="./media/sprites.png"></image></g>
+ZoomOut -> clipPath -> rect
+*/
+.blocklyZoom {
+  cursor: pointer;
+}
+.blocklyTrash {
+  cursor: pointer;
+  opacity: 1.0;
 }

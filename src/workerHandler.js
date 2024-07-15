@@ -7,12 +7,25 @@ const outputDiv = document.querySelector("#outputArea");
 
 var isScriptRunning = false;
 var isAwaitingTermination = false;
+var worker;
 
-var worker = await PyWorker(
-    // Python code to execute
-    './worker.py',
-    { config: { sync_main_only: false } } // todo: attach pyscript.toml file here?
-);
+// Initialize the Pyodide environment
+try {
+    worker = await PyWorker(
+        // Python code to execute
+        './worker.py',
+        { config: { sync_main_only: false } } // todo: attach pyscript.toml file here?
+    );
+}
+catch (e) {
+    console.error(e);
+    outputDiv.insertAdjacentHTML('beforeend', 
+    `<code><p style="color: #F00; font-weight:bold" >An exception occured while loading the Pyodide Environment
+  (Try refreshing the page to fix this)</p><hr><b>Exception Details:</b><br><br>${e}<br></code>
+<hr><br>
+`);
+    throw e;
+}
 
 export const waitForClickEvent = async () => {
     // Waits until the input box's submit button is clicked

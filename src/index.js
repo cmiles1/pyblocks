@@ -43,6 +43,7 @@ const codeDiv = document.getElementById('pythonArea');
 const blocklyDiv = document.getElementById('blocklyDiv');
 
 const ws = Blockly.inject(blocklyDiv, {
+  theme: Blockly.Themes.Zelos,
   grid: {
     spacing: 50,
     length: 0.5,
@@ -64,7 +65,7 @@ const ws = Blockly.inject(blocklyDiv, {
   trashcan: true,
   zoom: {
     controls: true,
-    startScale: 1.0,
+    startScale: 1.5,
     maxScale: 3,
     minScale: 0.3,
     scaleSpeed: 1.2,
@@ -73,19 +74,20 @@ const ws = Blockly.inject(blocklyDiv, {
   },
 });
 
-const backpackOptions = {
-  allowEmptyBackpackOpen: false,
-  useFilledBackpackImage: false,
-  contextMenu: {
-    emptyBackpack: false,
-    removeFromBackpack: true,
-    copyToBackpack: true,
-  },
-};
+
 
 /** Initialize Blockly plugins */
 function initializePlugins() {
-
+  const backpackOptions = {
+    allowEmptyBackpackOpen: false,
+    useFilledBackpackImage: false,
+    contextMenu: {
+      emptyBackpack: false,
+      removeFromBackpack: true,
+      copyToBackpack: true,
+    },
+  };
+  
   const backpack = new Backpack(ws, backpackOptions);
   backpack.init();
 
@@ -105,6 +107,34 @@ function initializePlugins() {
 
 }
 initializePlugins();
+
+
+// Remove trashcan lid animation
+var s = ws.trashcan.svgLid.getAttribute('clip-path').match(/url\(#(.*)\)/)[1];
+document.getElementById(s).remove();
+ws.trashcan.svgLid.remove();
+
+
+// Rescale icons
+ws.trashcan.svgGroup.querySelector('image').style.transform += 'scale(1.2)';
+var icons = ws.zoomControls_.svgGroup.querySelectorAll('image');
+icons.forEach((icon, index) => {
+  icon.style.transform += `scale(1.5) translate(0px, ${-(index-2)*15 - 40}px)`;
+  icon.style.opacity = 0.8;
+});
+
+
+// loop over all icons and indices
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -162,10 +192,13 @@ function updateLineNumbers(code) {
 /* 
 Rescaling between the workspace and the output pane
 */
-const horizontalResizeHandle = document.getElementById('resize');
+const horizontalResizeHandle = document.getElementById('horizResize');
+const verticalResizeHandle = document.getElementById('vertResize');
 const outputPane = document.getElementById('outputPane');
 const pageContainer = document.getElementById('pageContainer');
 const blocklyArea = document.getElementById('blocklyArea');
+const outputTextArea = document.getElementById('outputArea');
+const generatedCode = document.getElementById('generatedCode');
 
 /* Drag support */
 horizontalResizeHandle.addEventListener('mousedown', function (e) {
@@ -173,6 +206,12 @@ horizontalResizeHandle.addEventListener('mousedown', function (e) {
 
   document.addEventListener('mousemove', horizontalResize);
   document.addEventListener('mouseup', stopHorizontalResize);
+});
+verticalResizeHandle.addEventListener('mousedown', function (e) {
+  e.preventDefault();
+
+  document.addEventListener('mousemove', verticalResize);
+  document.addEventListener('mouseup', stopVerticalResize);
 });
 
 /* Mobile drag support */
@@ -182,10 +221,17 @@ horizontalResizeHandle.addEventListener('touchstart', function (e) {
   document.addEventListener('touchmove', horizontalResize);
   document.addEventListener('touchend', stopHorizontalResizeTouch);
 });
+verticalResizeHandle.addEventListener('touchstart', function (e) {
+  e.preventDefault();
+
+  document.addEventListener('touchmove', verticalResize);
+  document.addEventListener('touchend', stopVerticalResizeTouch);
+});
+
 
 
 function horizontalResize(e) {
-  var clientX = e.clientX??e.touches[0].clientX;
+  var clientX = (e.clientX??e.touches[0].clientX) - 10 - (window.innerWidth/100);
   const containerWidth = pageContainer.offsetWidth;
   var newBlocklyWidth = (clientX / containerWidth) * 100;
   var old = newBlocklyWidth;
@@ -210,6 +256,51 @@ function horizontalResize(e) {
   outputPane.style.width = `${100}%`;
 
   adjustBlocklyDiv();
+}
+
+
+function verticalResize(e) {
+  var clientY = e.clientY??e.touches[0].clientY;
+  const containerHeight = pageContainer.offsetHeight;
+
+  clientY -= generatedCode.getBoundingClientRect().top + 25; 
+
+
+  var newGeneratedCodeHeight = (clientY / containerHeight) * 100;
+  var old = newGeneratedCodeHeight;
+  // Ensure the code output area is at least 5% and at most 75% of the container
+  newGeneratedCodeHeight = Math.min(Math.max(newGeneratedCodeHeight, 5), 75);
+  if (old !== newGeneratedCodeHeight) {
+    if (old < newGeneratedCodeHeight) {
+      // Hide generatedCode
+      generatedCode.firstChild.style.display = 'none';
+      generatedCode.style.borderLeft = '0px';
+      generatedCode.style.backgroundColor = 'var(--blockly-main-fill)';
+      newGeneratedCodeHeight = 0;
+    } else {
+      // Hide outputTextArea
+      outputTextArea.style.display = 'none';
+      outputTextArea.style.borderLeft = '0px';
+      outputTextArea.style.backgroundColor = 'var(--blockly-main-fill)';
+      newGeneratedCodeHeight = 85;
+    }
+  } else {
+    generatedCode.style.borderLeft = '';
+    generatedCode.style.backgroundColor = '';
+    generatedCode.firstChild.style.display = 'block';
+    
+    outputTextArea.style.borderLeft = '';
+    outputTextArea.style.backgroundColor = '';
+    outputTextArea.style.display = '';
+  }
+  
+
+  // Resize the generated code and the output text area
+  generatedCode.style.flex = `0 0 ${newGeneratedCodeHeight}%`;
+  outputTextArea.style.height = `${100}%`;
+
+
+
 }
 
 function adjustBlocklyDiv() {
@@ -239,6 +330,21 @@ function stopHorizontalResizeTouch() {
   document.removeEventListener('touchend', stopHorizontalResizeTouch);
 }
 
+function stopVerticalResize() {
+  document.removeEventListener('mousemove', verticalResize);
+  document.removeEventListener('mouseup', stopVerticalResize);
+}
+
+function stopVerticalResizeTouch() {
+  document.removeEventListener('touchmove', verticalResize);
+  document.removeEventListener('touchend', stopVerticalResizeTouch);
+}
+
+
 window.addEventListener('resize', adjustBlocklyDiv);
 window.addEventListener('orientationchange', adjustBlocklyDiv);
 adjustBlocklyDiv();
+
+
+
+

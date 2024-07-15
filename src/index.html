@@ -11,6 +11,7 @@
   <script type="module" src="pyscript/core.js"></script>
 </head>
 
+
 <body>
   <div class="header">
     <h1>PyBlocks</h1>
@@ -34,13 +35,19 @@
     <div id="blocklyArea">
       <div id="blocklyDiv"></div>
     </div>
-    <div class="handle" id="resize" tabindex=-1>
-      <div class="grip"></div>
+    <div class="horizHandle" id="horizResize" tabindex=-1>
+      <div class="hgrip"></div>
     </div>
     <div id="outputPane">
+
       <pre id="generatedCode" spellcheck="false" autocapitalize="false"
         translate="no"><code class="hljs" id="pythonArea"></code></pre>
+      <div class="vertHandle" id="vertResize" tabindex=-1>
+        <div class="vgrip"></div>
+      </div>
+
       <pre id="outputArea"></pre>
+
     </div>
 
   </div>
