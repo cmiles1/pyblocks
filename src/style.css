@@ -114,9 +114,7 @@ pre,
 code {
   overflow: auto;
 }
-.injectionDiv {
-  min-height: 378px;
-}
+
 
 #pageContainer {
   display: flex;
@@ -135,6 +133,13 @@ code {
   display: block;
 }
 
+.blocklyFlyoutLabelText {
+  font-size: 1.25em !important;
+  font-weight: bold !important;
+  margin: 20px !important;
+}
+
+
 #blocklyDiv {
   margin-right: 5px;
   width: 100%;
@@ -147,9 +152,8 @@ code {
   margin-left: 0.5em;
   overflow: hidden;
   width: 20vw;
-  height: 100%;
   padding-right: 2em;
-  font-size: clamp(8px, 2vw, 25px);
+  font-size: clamp(8px, 2vw, 16px);
 }
 
 #generatedCode {
@@ -198,27 +202,29 @@ code {
   overflow-wrap: break-word;
   padding: 0px;
 }
-
-
-
+  
 .blocklyZoom, .blocklyTrash image {
   cursor: pointer;
   opacity: 0.5;
   filter: invert(0.8) brightness(1);
+  position: absolute;
 }
 
 .blocklyBackpack {
   cursor: pointer;
   opacity: 0.5;
-  filter: invert(0.2);
+  filter: invert(0.25);
+  position: absolute;
+
 }
-.blocklyBackpack:hover {
+.blocklyBackpack:hover, .blocklyBackpackDarken {
   filter: invert(0) brightness(1);
   opacity: 1.0;
 }
 
+
 .blocklyZoom:hover  {
-  filter: invert(0);
+  filter: invert(1) brightness(1);
   opacity: 1.0;
 }
 .blocklyTrash image:hover {

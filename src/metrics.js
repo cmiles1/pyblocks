@@ -2,8 +2,6 @@ import * as ScrollOptionsPlugin from "@blockly/plugin-scroll-options";
 import { FixedEdgesMetricsManager } from "@blockly/fixed-edges";
 import * as Blockly from "blockly";
 
-
-
 export class PyBlocksScrollBlockDragger extends ScrollOptionsPlugin.ScrollBlockDragger {
   /**
    * Checks if the block overflows the left or right edge of the workspace
@@ -15,10 +13,7 @@ export class PyBlocksScrollBlockDragger extends ScrollOptionsPlugin.ScrollBlockD
     const blockOverflows = this.getMouseOverflows_(viewMetrics, mouse);
     const width = this.workspace.toolbox_.width_ / this.workspace.scale;
     for (const side of ["left", "right"]) {
-      if (
-        blockOverflows[side] > -width &&
-        blockOverflows[side] < width * 0.9
-      ) {
+      if (blockOverflows[side] > -width && blockOverflows[side] < width * 0.9) {
         return blockOverflows["top"] < 0 && blockOverflows["bottom"] < 0;
       }
     }
@@ -60,27 +55,22 @@ export class PyBlocksScrollBlockDragger extends ScrollOptionsPlugin.ScrollBlockD
   }
 }
 
-
-
-
-
 /**
  * @typedef {{
-*   top: (boolean|undefined),
-*   bottom: (boolean|undefined),
-*   left: (boolean|undefined),
-*   right: (boolean|undefined)
-* }}
-*/
+ *   top: (boolean|undefined),
+ *   bottom: (boolean|undefined),
+ *   left: (boolean|undefined),
+ *   right: (boolean|undefined)
+ * }}
+ */
 let FixedEdgesConfig;
 
 /**
-* The current configuration for fixed edges.
-* @type {!FixedEdgesConfig}
-* @private
-*/
+ * The current configuration for fixed edges.
+ * @type {!FixedEdgesConfig}
+ * @private
+ */
 const fixedEdges = {};
-
 
 export class PyBlocksMetricsManager extends ScrollOptionsPlugin.ScrollMetricsManager {
   constructor(workspace) {
@@ -95,19 +85,18 @@ export class PyBlocksMetricsManager extends ScrollOptionsPlugin.ScrollMetricsMan
   }
 
   getMetrics() {
-    // Combine metrics from both managers
+    // Combine metrics from both managers (used for scrolling, workspace pan, etc.)
     const fixedEdgesMetrics = this.fixedEdgesMetricsManager.getMetrics();
     const scrollMetrics = super.getMetrics();
-    
-    // Example of how to merge metrics
+    // Merge workspace metrics
     const mergedMetrics = {
       ...fixedEdgesMetrics,
       ...scrollMetrics,
       // Any specific logic to merge/resolve conflicts
       ...{
         contentTop: Math.max(0, scrollMetrics.contentTop),
-        contentLeft: Math.max(0, scrollMetrics.contentLeft)
-      }
+        contentLeft: Math.max(0, scrollMetrics.contentLeft),
+      },
     };
     return mergedMetrics;
   }
