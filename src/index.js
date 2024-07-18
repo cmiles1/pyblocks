@@ -44,6 +44,9 @@ Blockly.WorkspaceSvg.newTrashcan = function (workspace) {
   return trashcan;
 };
 
+DarkTheme.setCategoryStyle("backpack_category", { colour: "#0000FF" });
+DarkTheme.setBlockStyle("backpack_category", { colour: "#0000FF" });
+
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById("pythonArea");
 const blocklyDiv = document.getElementById("blocklyDiv");
@@ -81,7 +84,6 @@ const ws = Blockly.inject(blocklyDiv, {
     wheel: true,
   },
 });
-
 // Set maximum width of toolbox flyout
 var toolboxFlyout = ws.getToolbox().getFlyout();
 
