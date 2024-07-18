@@ -56,7 +56,7 @@ class CustomStdin:
                 
         data = sync.waitForClickEvent()
 
-        return data  # Simulate input() behavior
+        return data + "\n" # Simulate input() behavior
 
 # Initialize with the custom input function
 custom_stdin = CustomStdin()
@@ -71,7 +71,7 @@ def run(script: str):
     try:
         exec(script, global_vars)
     except Exception as e:
-        out_data = "Error: " + traceback.format_exc() + "\n\n"
+        out_data = "Exception: " + traceback.format_exc() + "\n\n"
     except SystemExit as e:
         out_data = "Program exited with code: " + str(e) + "\n\n"
     finally:

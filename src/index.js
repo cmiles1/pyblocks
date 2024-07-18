@@ -1,12 +1,10 @@
-/**
- * @license
- * Copyright 2023 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
+// TODO:
+// 1. Close trashcan properly
+// 2. Add input block to toolbox
 
 import * as Blockly from "blockly";
 import { blocks } from "./blocks/text";
-import { forBlock } from "./generators/python";
+import { blocks as customBlocks } from "./generators/python";
 import { pythonGenerator } from "blockly/python";
 import { save, load } from "./serialization";
 import { toolbox } from "./toolbox";
@@ -21,6 +19,7 @@ import {
   ContinuousToolbox,
   ContinuousFlyout,
 } from "@blockly/continuous-toolbox";
+import { PyBlocksTrashcan } from "./trashcan";
 
 const hljs = require("highlight.js/lib/core");
 hljs.registerLanguage("python", require("highlight.js/lib/languages/python"));
@@ -29,7 +28,7 @@ hljs.registerLanguage("python", require("highlight.js/lib/languages/python"));
 pythonGenerator.INDENT = "    "; // 4 spaces is required by PyScript
 
 Blockly.common.defineBlocks(blocks);
-Object.assign(pythonGenerator.forBlock, forBlock);
+Object.assign(pythonGenerator.forBlock, customBlocks);
 
 // Sets the edges that will be fixed in the workspace
 // (i.e. other directions can be scrolled infinitely)
@@ -37,6 +36,13 @@ PyBlocksMetricsManager.setFixedEdges({
   top: true,
   left: true,
 });
+
+Blockly.WorkspaceSvg.newTrashcan = function (workspace) {
+  workspace.toolboxPosition = Blockly.TOOLBOX_AT_RIGHT;
+  var trashcan = new PyBlocksTrashcan(workspace);
+  workspace.toolboxPosition = Blockly.TOOLBOX_AT_LEFT;
+  return trashcan;
+};
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById("pythonArea");
@@ -68,13 +74,16 @@ const ws = Blockly.inject(blocklyDiv, {
   trashcan: true,
   zoom: {
     controls: true,
-    startScale: 0.6,
+    startScale: 0.8,
     maxScale: 2.0,
     minScale: 0.25,
     scaleSpeed: 1.2,
     wheel: true,
   },
 });
+
+// Set maximum width of toolbox flyout
+var toolboxFlyout = ws.getToolbox().getFlyout();
 
 /** Initialize Blockly plugins */
 function initializePlugins() {
@@ -89,7 +98,12 @@ function initializePlugins() {
     },
   };
   const backpack = new Backpack(ws, backpackOptions);
-  backpack.init();
+  backpack.init(ws);
+
+  // Register category button for opening backpack
+  ws.registerButtonCallback("openBackpack", (x) => {
+    backpack.open();
+  });
 
   // Scroll options plugin
   const scrollOptions = new ScrollOptions(ws);
@@ -108,36 +122,46 @@ function initializePlugins() {
 
   // Shadow block converter plugin
   ws.addChangeListener(shadowBlockConversionChangeListener);
+
+  // Rebind flyout scales to a fixed amount (blockly workspace zoom level)
+  // This effectively prevents resizing the toolbox flyout through blockly
+  // instead, the user should use their browser's zoom mechanisms to resize the flyouts
+  toolboxFlyout.getFlyoutScale = () => {
+    // Keep track of the toolbox's current width (see: horizontalResize)
+    return 0.8;
+  };
+
+  backpack.getFlyout().getFlyoutScale = () => {
+    return 0.8;
+  };
+
+  ws.trashcan.flyout.getFlyoutScale = () => {
+    return 0.6;
+  };
+
+  // Monkey Patch closing / opening flyouts
+  const wsToolboxFlyout = ws.getToolbox()?.getFlyout();
+  const setVisiblity = wsToolboxFlyout.setVisible;
+  wsToolboxFlyout.setVisible = (visible) => {
+    setVisiblity.call(wsToolboxFlyout, visible);
+    if (visible) {
+      // close all other flyouts
+      backpack.close();
+      ws.trashcan.closeFlyout();
+    }
+  };
+  const wsTrashcanOpen = ws.trashcan.openFlyout;
+  ws.trashcan.openFlyout = () => {
+    backpack.close();
+    wsToolboxFlyout.setVisible(false);
+    wsTrashcanOpen.call(ws.trashcan);
+  };
+
+  // Refresh toolbox contents
+  // (fixes label horizontal resizing within the toolbox)
+  ws.getToolbox()?.refreshSelection();
 }
 initializePlugins();
-
-// Remove trashcan lid animation
-var s = ws.trashcan.svgLid.getAttribute("clip-path").match(/url\(#(.*)\)/)[1];
-document.getElementById(s).remove();
-ws.trashcan.svgLid.remove();
-
-// Rescale icons
-ws.trashcan.svgGroup.querySelector("image").style.transform += "scale(1.2)";
-var icons = ws.zoomControls_.svgGroup.querySelectorAll("image");
-icons.forEach((icon, index) => {
-  icon.style.transform += `scale(1.5) translate(0px, ${
-    -(index - 2) * 15 - 40
-  }px)`;
-  icon.style.opacity = 0.8;
-});
-
-// Set maximum width of toolbox flyout
-var toolboxFlyout = ws.getToolbox().getFlyout();
-var toolboxWidth = ws.getToolbox().getClientRect().right + 20;
-
-// Rebind the toolbox flyout scale to a fixed amount (0.6 zoom level)
-// This effectively prevents resizing the toolbox flyout through blockly
-// instead, the user should use their browser's zoom mechanisms
-toolboxFlyout.getFlyoutScale = () => {
-  // Keep track of the toolbox's current width (see: horizontalResize)
-  toolboxWidth = ws.getToolbox().getClientRect().right + 20;
-  return 0.6;
-};
 
 /* Translates the workspace to Python code and displays it in the codeDiv. */
 const workspaceToPython = () => {
@@ -193,6 +217,10 @@ const pageContainer = document.getElementById("pageContainer");
 const blocklyArea = document.getElementById("blocklyArea");
 const outputTextArea = document.getElementById("outputArea");
 const generatedCode = document.getElementById("generatedCode");
+// Minimum width of the workspace as a percentage of the pageContainer's width
+const MIN_WORKSPACE_SIZE_PRC = 10;
+// Cached toolbox width (needed for horizontalResize)
+var toolboxWidth = 0;
 
 /* Drag support */
 horizontalResizeHandle.addEventListener("mousedown", function (e) {
@@ -234,13 +262,19 @@ verticalResizeHandle.addEventListener(
 );
 
 function horizontalResize(e) {
+  var newToolboxWidth = toolboxFlyout.getClientRect()?.right;
+  if (newToolboxWidth > 0) {
+    toolboxWidth = newToolboxWidth;
+  }
+
   // Get the X position of the mouse / touch event
   var clientX =
     (e.clientX ?? e.touches[0].clientX) - horizontalResizeHandle.offsetWidth;
   // Find the total width of the toolbox, workspace and code area
   const containerWidth = pageContainer.offsetWidth;
   // Calculate the left-most and right-most positions of the resize bar
-  const leftMost = (toolboxWidth / containerWidth) * 100;
+  const leftMost =
+    (toolboxWidth / containerWidth) * 100 + MIN_WORKSPACE_SIZE_PRC;
   const rightMost = 100 - 3;
   var newBlocklyWidth = (clientX / containerWidth) * 100;
 
