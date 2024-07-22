@@ -18,10 +18,6 @@
   </div>
 
   <div class="pyscript">
-    <div class="navbar">
-      <div><button class="button">Save</button><button class="button">Settings</button></div>
-      <div><button class="button">Help</button><button class="button run">Run</button></div>
-    </div>
     <script src="workerHandler.js" type="module"></script>
   </div>
 
@@ -33,9 +29,12 @@
       <div class="hgrip"></div>
     </div>
     <div id="outputPane">
-
       <pre id="generatedCode" spellcheck="false" autocapitalize="false"
         translate="no"><code class="hljs" id="pythonArea"></code></pre>
+      <div class="editorNavbar">
+        <button class="button run">Run</button>
+        <button class="button clear">Clear</button>
+      </div>
       <div class="vertHandle" id="vertResize" tabindex=-1>
         <div class="vgrip"></div>
       </div>
@@ -47,7 +46,11 @@
   </div>
 
   <div class="footer">
-    <p>PyBlocks</p>
+    <div id="blockly-attribution">
+      <object type="image/svg+xml" data="media/blockly-logo.svg" width="100" height="75">
+        Your browser does not support SVG
+      </object>
+    </div>
   </div>
 
 </body>

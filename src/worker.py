@@ -46,12 +46,12 @@ class CustomStdin:
         # Create the text area for the user
         # (todo: move to javascript side?)
         div = output_area.create('div',
-                                 classes=['input-div']) 
+                                 classes=['inputDiv']) 
         div.create('textarea',
-                   classes=['user-input'])
+                   classes=['userInput'])
         
         div.create('button',
-                   classes=['submit-button'],
+                   classes=['submitButton'],
                    html='Submit')
                 
         data = sync.waitForClickEvent()

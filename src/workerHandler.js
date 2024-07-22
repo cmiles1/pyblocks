@@ -3,6 +3,7 @@ import { PyWorker } from "./pyscript/core.js";
 // Worker for running Python code through PyScript
 
 const runButton = document.querySelector(".run");
+const clearButton = document.querySelector(".clear");
 const outputDiv = document.querySelector("#outputArea");
 
 var isScriptRunning = false;
@@ -30,11 +31,11 @@ try {
 
 export const waitForClickEvent = async () => {
   // Waits until the input box's submit button is clicked
-  var btn = document.querySelector(".submit-button");
+  var btn = document.querySelector(".submitButton");
   var data = null;
 
   btn.addEventListener("click", async () => {
-    var x = document.querySelector(".user-input:enabled");
+    var x = document.querySelector(".userInput:enabled");
     if (x) {
       x.disabled = true;
       x.style.resize = "none";
@@ -88,14 +89,14 @@ runButton.addEventListener("click", async () => {
     await worker.terminate();
 
     // Clear the latest input boxes in the console
-    var btns = document.querySelectorAll(".submit-button");
+    var btns = document.querySelectorAll(".submitButton");
     btns.forEach((element) => {
       element.remove();
     });
-    var textareas = document.querySelectorAll(".user-input:enabled");
+    var textareas = document.querySelectorAll(".userInput:enabled");
     textareas.forEach((element) => {
       element.disabled = true;
-      e.style.resize = "none";
+      element.style.resize = "none";
     });
 
     // Let the user know the script has been stopped
@@ -117,4 +118,14 @@ runButton.addEventListener("click", async () => {
     isScriptRunning = false;
     isAwaitingTermination = false;
   }
+});
+
+clearButton.addEventListener("click", () => {
+  if (isScriptRunning || outputDiv.innerHTML.length !== 0) {
+    var response = confirm("Are you sure you want to clear the console?");
+    if (!response) {
+      return;
+    }
+  }
+  outputDiv.innerHTML = "";
 });

@@ -1,7 +1,7 @@
 :root {
   --background-color: #2b2b2b;
   --header-footer-color: #1e1e1e;
-  --navbar-color: #5d5d5d;
+  --nav-color: #5d5d5d;
   --button-color: #4CAF50;
   --button-hover-color: #45a049;
   --handle-color: #ccc;
@@ -23,26 +23,27 @@ body {
   padding: 0;
 }
 
-.header, .footer {
+.header {
   background-color: var(--header-footer-color);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   min-height: 5vh;
   text-align: center;
   padding-top: 5px;
-  padding-bottom: 5px;
-  
+  padding-bottom: 1vh;
+  margin-bottom: 2vh;
 }
 
-.navbar {
-  background-color: var(--navbar-color);
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+.footer {
   display: flex;
-  min-height: 2.5vh;
-  justify-content: space-between;
-  padding: 10px;
+  justify-content: flex-end;
+  background-color: var(--header-footer-color);
+  padding-right: 2.5vw;
+  min-height: 2.5%;
+  padding-top: 1vh;
+  margin-top: 2vh;
 }
 
-.button, .submit-button {
+.button, .submitButton {
   background-color: var(--button-color);
   border: none;
   border-radius: 8%;
@@ -53,18 +54,20 @@ body {
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
-  font-size: clamp(8px, 2vw, 32px);  
+  font-size: clamp(8px, 2vw, 32px);
 }
-.button {
-  font-size: clamp(8px, 2vw, 32px);  
-}
-.submit-button {
+
+.submitButton {
   font-size: clamp(8px, 2vw, 16px); 
   width: clamp(80px, 32vw, 120px);
 }
+.button.run, .button.clear {
+  font-size: 2em; 
+  width: 10vw;
+  border-radius: 4%;
+}
 
-
-.button:hover, .submit-button:hover {
+.button:hover .submitButton:hover {
   background-color: var(--button-hover-color);
 }
 
@@ -113,15 +116,15 @@ body {
   background-color: var(--handle-hover-color);
 }
 
-.input-div {
+.inputDiv {
   display: flex;
   flex-direction: column;
   width: 25%;
 }
-.user-input {
+.userInput {
   width: 100%;
 }
-.user-input:disabled {
+.userInput:disabled {
   background-color: var(--disabled-color);
   caret-color: transparent;
   color: var(--disabled-text-color);
@@ -270,7 +273,7 @@ code {
 
 .blocklyFlyoutLabel .blocklyFlyoutLabelBackground {
   opacity: 1;
-  fill: var(--navbar-color);
+  fill: var(--nav-color);
 }
 
 .blocklyFlyoutLabel:not(.flyoutHeaderLabel) .blocklyFlyoutLabelBackground {
@@ -289,7 +292,7 @@ code {
 }
 
 .blocklyToolboxDiv {
-  background-color: var(--navbar-color);
+  background-color: var(--nav-color);
   color: var(--text-color);
 }
 .categoryBubble {
@@ -302,3 +305,7 @@ code {
 }
 
 
+.editorNavbar {
+  display: flex;
+  justify-content: center;
+}
