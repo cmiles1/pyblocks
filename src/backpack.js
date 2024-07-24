@@ -127,17 +127,13 @@ export class Backpack extends BackpackPlugin {
 
     this.toolbox = workspace.getToolbox();
     this.toolboxFlyout = this.toolbox.getFlyout();
-
-    if (this.contents_.length == 0) {
-      // Add a label block to the flyout content.
-      var labelData = JSON.stringify({
-        kind: "label",
-        text: "Backpack",
-        "web-class": "flyoutHeaderLabel",
-      });
-      this.setContents([labelData]);
-    }
-
+    // Add a label block to the flyout content.
+    var labelData = JSON.stringify({
+      kind: "label",
+      text: "Backpack",
+      "web-class": "flyoutHeaderLabel",
+    });
+    this.contents_.push(labelData);
     // Bind toolbox buttons to open/close the backpack
     this.toolbox.contents_.forEach((categoryDiv) => {
       if (categoryDiv.name_ === "Backpack") {
@@ -280,6 +276,19 @@ export class Backpack extends BackpackPlugin {
         "transform",
         `translate(${this.left_},${this.top_})`
       );
+    }
+  }
+
+  /**
+   * Adds multiple items to the backpack.
+   *
+   * @param items The backpack contents to add.
+   */
+  addItems(items) {
+    const addedItems = this.filterDuplicates(items);
+    if (addedItems.length) {
+      this.contents_.push(...addedItems);
+      this.onContentChange();
     }
   }
 
