@@ -1,10 +1,13 @@
 import { PyWorker } from "./pyscript/core.js";
+// import * as fs from fs;
 
 // Worker for running Python code through PyScript
 
 const runButton = document.querySelector(".run");
 const clearButton = document.querySelector(".clear");
+// const saveButton = document.querySelector(".save");
 const outputDiv = document.querySelector("#outputArea");
+// const fs = require('fs');
 
 var isScriptRunning = false;
 var isAwaitingTermination = false;
@@ -129,3 +132,31 @@ clearButton.addEventListener("click", () => {
   }
   outputDiv.innerHTML = "";
 });
+
+// saveButton.addEventListener("click", () => {
+
+//   if (isScriptRunning) {
+//     alert("Please wait for the script to finish running")
+//     return;
+//   }
+//   else {
+//     console.log("starting");
+//     const text = localStorage.getItem("pythonCode");
+//     if (text.length < 1) {
+//       alert("There is no code to save")
+//       return;
+//     }
+//     // Requiring fs module in which writeFile function is defined
+//     // const writer = fs.require('fs')
+//     console.log(text);
+
+//     // Write data in 'output.py' .
+//     fs.writeFile('output.py', text, (err) => {
+//       // In case of a error throw err.
+//       if (err) throw err;
+//     });
+
+//     console.log("success");
+//     // document.getElementById('save_iframe').src = writer;
+//   }
+// })

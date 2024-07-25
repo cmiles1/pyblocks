@@ -299,6 +299,61 @@ code {
   border-color: black;
 }
 
+#blockly-0.blocklyTreeRow .blocklyTreeRowContentContainer .categoryBubble{
+  background-image: url('media/logic-icon.svg');
+  background-position: center;
+  background-size: 14px 14px;
+  background-repeat: no-repeat;
+}
+
+#blockly-1.blocklyTreeRow .blocklyTreeRowContentContainer .categoryBubble{
+  background-image: url('media/loops-icon.svg');
+  background-position: center;
+  background-size: 13px 13px;
+  background-repeat: no-repeat;
+}
+
+#blockly-2.blocklyTreeRow .blocklyTreeRowContentContainer .categoryBubble{
+  background-image: url('media/math-icon.svg');
+  background-position: center;
+  background-size: 13px 13px;
+  background-repeat: no-repeat;
+}
+
+#blockly-3.blocklyTreeRow .blocklyTreeRowContentContainer .categoryBubble{
+  background-image: url('media/text-icon.svg');
+  background-position: center;
+  background-size: 13px 13px;
+  background-repeat: no-repeat;
+}
+
+#blockly-4.blocklyTreeRow .blocklyTreeRowContentContainer .categoryBubble{
+  background-image: url('media/lists-icon.svg');
+  background-position: center;
+  background-size: 13px 13px;
+  background-repeat: no-repeat;
+}
+
+#blockly-6.blocklyTreeRow .blocklyTreeRowContentContainer .categoryBubble{
+  background-image: url('media/var-icon.svg');
+  background-position: center;
+  background-size: 13px 13px;
+  background-repeat: no-repeat;
+}
+
+#blockly-7.blocklyTreeRow .blocklyTreeRowContentContainer .categoryBubble{
+  background-image: url('media/fun-icon.svg');
+  background-position: center;
+  background-size: 14px 14px;
+  background-repeat: no-repeat;
+}
+
+#blockly-8.blocklyTreeRow .blocklyTreeRowContentContainer .categoryBubble{
+  background-image: url('media/back-icon.svg');
+  background-position: center;
+  background-size: 15px 15px;
+  background-repeat: no-repeat;
+}
 
 .blocklyFlyoutButton {
   font-size: 2.5rem;
